@@ -4,3 +4,6 @@ get swagger ui: http://localhost:8080/swagger-ui/index.html
 2. simple upload, download file, and delete file
 3. enable s3 to allow user to share file
 
+## note
+### API
+https://stackoverflow.com/questions/72025894/list-differences-dto-vo-entity-domain-model
