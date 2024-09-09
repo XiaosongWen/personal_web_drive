@@ -1,3 +1,4 @@
+"use client"
 import {
   Navbar as NextUINavbar,
   NavbarContent,
@@ -18,15 +19,50 @@ import clsx from "clsx";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import {
-    TwitterIcon,
     GithubIcon,
-    DiscordIcon,
-    HeartFilledIcon,
     SearchIcon,
-    Logo, TestIcon,
+    Logo, LogoutIcon,
 } from "@/components/icons";
+import {LogIn} from "@/components/LogIn";
+import {useEffect, useState} from "react";
+import {getUserInfo, LogOut} from "@/api/user";
+import {Avatar, Popover, PopoverContent, PopoverTrigger} from "@nextui-org/react";
+import {getInitials} from "@/utils/utils";
 
+interface UserInfo {
+    firstName: string,
+    lastName: string,
+    email: string,
+    avatar: string,
+}
 export const Navbar = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+    const logout = async () => {
+        try {
+            await LogOut(); // Perform logout API call
+            setIsLoggedIn(false); // Set logged out state
+            setUserInfo(null); // Clear user info
+        } catch (error) {
+            console.error('Error logging out', error);
+        }
+    }
+    const fetchUserInfo = () => {
+        getUserInfo().then((response) => {
+            if (response.data.code == 200) {
+                setUserInfo(response.data.data);
+                setIsLoggedIn(true);
+            }else {
+                setIsLoggedIn(false);
+                setUserInfo(null);
+            }
+        });
+    }
+    useEffect(()=>{
+        fetchUserInfo();
+    }, []);
+
   const searchInput = (
     <Input
       aria-label="Search"
@@ -87,13 +123,32 @@ export const Navbar = () => {
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
         <NavbarItem className="hidden md:flex">
-          <Button
-            className="text-sm font-normal text-default-600 bg-default-100"
-            startContent={<TestIcon className="text-danger" />}
-            variant="flat"
-          >
-            Sign In
-          </Button>
+            {isLoggedIn ? (
+                <div className="flex items-center space-x-2">
+                    <Popover placement="bottom" showArrow={true}>
+                        <PopoverTrigger>
+                            <Avatar showFallback name={getInitials(userInfo!.firstName, userInfo!.lastName)} src={userInfo?.avatar} />
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <div className="px-1 py-2">
+                                <div className="text-small font-bold">{userInfo!.email}</div>
+                                <Button
+                                    // color="warning"
+                                    size="sm"
+                                    variant="light"
+                                    onPress={() => logout()} // Function to handle logout
+                                >
+                                    <LogoutIcon /> Logout
+                                </Button>
+
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+
+                </div>
+            ) : (
+                <LogIn onLoginSuccess={fetchUserInfo} />
+            )}
         </NavbarItem>
       </NavbarContent>
 
