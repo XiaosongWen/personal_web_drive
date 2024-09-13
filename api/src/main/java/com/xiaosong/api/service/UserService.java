@@ -74,6 +74,7 @@ public class UserService {
             System.out.println(e.getMessage());
         }
     }
+
     public UserInfoVo getCurrentUserInfo(String token){
         String userInfoJSON = redisTemplate.opsForValue().get("user:login:" + token);
         if(userInfoJSON == null) {
@@ -84,5 +85,13 @@ public class UserService {
         assert userInfo != null;
         BeanUtils.copyProperties(userInfo, userInfoVo);
         return userInfoVo ;
+    }
+
+    public SysUser getCurrentUser(String token){
+        String userInfoJSON = redisTemplate.opsForValue().get("user:login:" + token);
+        if(userInfoJSON == null) {
+            throw new MyException(ResultCodeEnum.LOGIN_ERROR) ;
+        }
+        return JSON.parseObject(userInfoJSON , SysUser.class) ;
     }
 }

@@ -1,9 +1,13 @@
 package com.xiaosong.api.model.entity.base;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @MappedSuperclass
 @Getter
@@ -17,13 +21,15 @@ public abstract class BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    private Date createTime;
+    @Column(name = "created_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdTime;
 
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    private Date updateTime;
+    @Column(name = "last_updated_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdatedTime;
 
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
     @PrePersist
@@ -31,5 +37,11 @@ public abstract class BaseEntity implements Serializable {
         if (isDeleted == null) {
             isDeleted = false;  // Set default value if not already set
         }
+        createdTime = new Date(System.currentTimeMillis());
+        lastUpdatedTime = new Date(System.currentTimeMillis());
+    }
+    @PreUpdate
+    protected void onUpdate() {
+        lastUpdatedTime = new Date(System.currentTimeMillis());
     }
 }
