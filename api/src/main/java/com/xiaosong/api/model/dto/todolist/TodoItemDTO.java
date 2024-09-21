@@ -9,8 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TodoItemDTO {
-    private Long id;
     @NonNull
     private String description;
-    private Boolean done;
+    private Boolean done = false;
 }

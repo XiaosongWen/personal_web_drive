@@ -13,12 +13,12 @@ export const siteConfig = {
       href: "/drive",
     },
     {
-      label: "TodoList",
-      href: "/todoList",
-    },
-    {
       label: "Blog",
       href: "/blog",
+    },
+    {
+      label: "TodoList",
+      href: "/todoList",
     },
     {
       label: "About",

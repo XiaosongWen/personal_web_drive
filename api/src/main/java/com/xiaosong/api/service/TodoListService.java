@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -54,4 +55,22 @@ public class TodoListService {
     }
 
 
+    public TodoItemVO updateTodoItem(String token, Long todoId, TodoItemDTO updateRequest) {
+        SysUser userInfo = userService.getCurrentUser(token);
+        Optional<TodoItem> byId = todoItemSysUserRepository.findById(todoId);
+        if (byId.isPresent()){
+            TodoItem todoItem = byId.get();
+            if (!todoItem.getUser().getId().equals(userInfo.getId())) {
+                throw new MyException(ResultCodeEnum.AUTHORIZATION_ERROR) ;
+            }
+            todoItem.setDescription(updateRequest.getDescription());
+            todoItem.setDone(updateRequest.getDone());
+            TodoItem save = todoItemSysUserRepository.save(todoItem);
+            TodoItemVO vo = new TodoItemVO();
+            BeanUtils.copyProperties(save, vo);
+            return vo;
+        }
+
+        return null;
+    }
 }

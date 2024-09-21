@@ -31,4 +31,12 @@ public class TodoListController {
         TodoItemVO todoItem = todoListService.creatTodoItem(token, item);
         return Result.build( ResultCodeEnum.SUCCESS, todoItem);
     }
+    @PutMapping("/{todoId}")
+    public Result<TodoItemVO> update(
+            @RequestHeader(value = "token") String token,
+            @PathVariable Long todoId,
+            @RequestBody TodoItemDTO updateRequest) {
+        TodoItemVO updatedTodo = todoListService.updateTodoItem(token, todoId, updateRequest);
+        return Result.build( ResultCodeEnum.SUCCESS, updatedTodo);
+    }
 }

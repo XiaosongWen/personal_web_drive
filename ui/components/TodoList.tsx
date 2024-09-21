@@ -1,39 +1,51 @@
 "use client"
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import {Input, Button, Card, Spacer, Textarea, Divider, Listbox, ListboxItem} from '@nextui-org/react';
-import { nanoid } from 'nanoid';
 import {CardBody} from "@nextui-org/card";
-interface Task {
-    id: string;
-    name: string;
-    completed: boolean;
-}
+import {createItem, getTodoList, updateTodoItem} from "@/api/todoList";
 
-const defaultTask = () => {
-    return {
-        id: nanoid(6),
-        name: "",
-        completed: false,
-    }
-};
 const TodoList = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<TodoItem[]>([]);
   const [newTask, setNewTask] = useState<string>("");
 
   const addTask = () => {
     if (newTask.trim() !== '') {
-        const t = defaultTask();
-        t.name = newTask;
-        setTasks([...tasks, t]);
-        setNewTask("");
+        const t = {
+            id: "",
+            description: newTask,
+            done: false
+        };
+        createItem(t).then(
+            (res) => {
+                t.id = res.data.id;
+                setTasks([...tasks, t]);
+                setNewTask("");
+            }
+        );
     }
   };
+  const getAllTasks =() => {
+      getTodoList().then(
+          (res) => {
+              setTasks(res.data.data);
+          });
+  }
+  useEffect(() => {
+      getAllTasks();
+  }, [])
   const toggleTaskCompletion  = (id: any) => {
-      const updatedTasks = tasks.map((task) =>
-          task.id === id ? { ...task, completed: !task.completed } : task
-      );
-      setTasks(updatedTasks);
+      const updatedTasks = tasks.filter((task) => task.id+"" === id);
+      if (updatedTasks.length == 1) {
+          const update = updatedTasks[0];
+          update.done = !update.done;
+          updateTodoItem(update.id, update).then(
+                (res) => {
+                    getAllTasks();
+                }
+          )
+      }
   };
+
   return (
       <>
           <h1>To-Do List</h1>
@@ -45,21 +57,21 @@ const TodoList = () => {
                   {(item) => (
                       <ListboxItem
                           key={item.id}
-                          hidden={item.completed}
+                          hidden={item.done}
                           textValue = "123"
                           style={{
                                   display: 'flex',
                                   justifyContent: 'space-between',
                                   alignItems: 'center',
                                   marginBottom: '10px',
-                                  textDecoration: item.completed ? 'line-through' : 'none',
-                                  color: item.completed ? '#888' : 'inherit',
+                                  textDecoration: item.done ? 'line-through' : 'none',
+                                  color: item.done ? '#888' : 'inherit',
                               }}
                       >
 
                           <Card>
                               <CardBody>
-                                  {item.name}
+                                  {item.description}
                               </CardBody>
                           </Card>
 

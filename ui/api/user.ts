@@ -1,10 +1,7 @@
 import request from '@/utils/request'
 
 // 登录接口
-interface LoginBody{
-    userEmail: string,
-    password: string
-}
+
 export const Login = (data:LoginBody) => {
     return  request({
         url: '/api/v1/user/login',

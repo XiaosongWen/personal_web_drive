@@ -27,13 +27,4 @@ public class TodoItem extends BaseEntity {
     @Column(name = "is_done", nullable = false)
     private boolean isDone;
 
-    @Override
-    public String toString() {
-        return "TodoItem{" +
-                "id = " + super.getId() +
-                "user=" + user +
-                ", description='" + description + '\'' +
-                ", isDone=" + isDone +
-                '}';
-    }
 }
