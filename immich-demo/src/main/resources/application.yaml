@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: immich-demo
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource # HikariCP is the default connection pool in Spring Boot
+    driver-class-name: org.postgresql.Driver # PostgreSQL driver
+    url: jdbc:postgresql://localhost:5432/immich?useSSL=false
+    username: postgres
+    password: postgres
+#  jpa:
+#    properties:
+#      hibernate:
+#        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+#        physical-strategy: com.xiaosong.immichdemo.config.CustomPhysicalNamingStrategy
+
+
+
+server:
+  port: 8081
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
+
+
