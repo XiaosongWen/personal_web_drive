@@ -3,6 +3,7 @@ package com.xiaosong.api.model.vo.todolist;
 import lombok.*;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -10,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TodoItemVO {
-    private Long id;
+    private UUID id;
     private String description;
     private boolean isDone;
     private Date createdTime;

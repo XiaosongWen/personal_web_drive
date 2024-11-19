@@ -29,12 +29,11 @@ public class UserController {
     }
     @PostMapping(value = "/register")
     public Result<String> register() {
-        System.out.println("register user");
         userService.register();
         return Result.<String>build( ResultCodeEnum.SUCCESS, "create user success");
     }
     @GetMapping(value = "/info")
-    public Result<UserInfoVo> getCurrentUser(@RequestHeader(value = "token") String token){
+    public Result<UserInfoVo> getCurrentUser(@RequestHeader(value = "token", defaultValue = "") String token){
         UserInfoVo userInfoVo = userService.getCurrentUserInfo(token) ;
         return Result.build(ResultCodeEnum.SUCCESS, userInfoVo);
     }

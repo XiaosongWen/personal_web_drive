@@ -53,10 +53,10 @@ export const Navbar = () => {
             if (response.data.code == 200) {
                 setUserInfo(response.data.data);
                 setIsLoggedIn(true);
-            }else {
-                setIsLoggedIn(false);
-                setUserInfo(null);
             }
+        }).catch((error) => {
+            setIsLoggedIn(false);
+            setUserInfo(null);
         });
     }
     useEffect(()=>{

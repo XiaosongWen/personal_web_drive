@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -34,7 +35,7 @@ public class TodoListController {
     @PutMapping("/{todoId}")
     public Result<TodoItemVO> update(
             @RequestHeader(value = "token") String token,
-            @PathVariable Long todoId,
+            @PathVariable UUID todoId,
             @RequestBody TodoItemDTO updateRequest) {
         TodoItemVO updatedTodo = todoListService.updateTodoItem(token, todoId, updateRequest);
         return Result.build( ResultCodeEnum.SUCCESS, updatedTodo);

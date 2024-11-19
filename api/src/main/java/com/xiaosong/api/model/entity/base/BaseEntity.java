@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @MappedSuperclass
 @Getter
@@ -17,9 +18,8 @@ import java.util.Date;
 public abstract class BaseEntity implements Serializable {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id", nullable = false, updatable = false)
+    private UUID id;
 
     @Column(name = "created_time")
     @Temporal(TemporalType.TIMESTAMP)
@@ -35,8 +35,9 @@ public abstract class BaseEntity implements Serializable {
     @PrePersist
     protected void onCreate() {
         if (isDeleted == null) {
-            isDeleted = false;  // Set default value if not already set
+            isDeleted = false;
         }
+        id = UUID.randomUUID();
         createdTime = new Date(System.currentTimeMillis());
         lastUpdatedTime = new Date(System.currentTimeMillis());
     }

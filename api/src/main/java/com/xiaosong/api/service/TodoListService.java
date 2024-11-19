@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -55,7 +56,7 @@ public class TodoListService {
     }
 
 
-    public TodoItemVO updateTodoItem(String token, Long todoId, TodoItemDTO updateRequest) {
+    public TodoItemVO updateTodoItem(String token, UUID todoId, TodoItemDTO updateRequest) {
         SysUser userInfo = userService.getCurrentUser(token);
         Optional<TodoItem> byId = todoItemSysUserRepository.findById(todoId);
         if (byId.isPresent()){

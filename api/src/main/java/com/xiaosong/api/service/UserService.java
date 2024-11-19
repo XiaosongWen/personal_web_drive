@@ -72,6 +72,7 @@ public class UserService {
             sysUserRepository.save(user);
         }catch (Exception e){
             System.out.println(e.getMessage());
+            throw e;
         }
     }
 
